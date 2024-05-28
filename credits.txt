@@ -1,0 +1,10 @@
+--------------------------------------------------------------
+Sistema de Gerenciamento de Catálogo de Séries - 2024 - SI300A
+
+Criado por:
+Ryan Pavini
+Carlos Eduardo de Deus Costa
+Rafael Rodrigues Galligani
+Rafael Dos Santos Alves
+Victor Clarindo Da Silva
+--------------------------------------------------------------
