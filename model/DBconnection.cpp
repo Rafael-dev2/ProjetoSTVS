@@ -13,7 +13,7 @@ DBconnection::DBconnection(){
     // Configure Connection
     // Configuração propria
     this->url = "jdbc:mariadb://localhost:3306/";
-    this->properties = {{"user", "Si300A2023_03"},{"password", "102030"}};
+    this->properties = {{"user", "Si300A2024_03"},{"password", "102030"}};
     /*Configurações da FT
     this->url = "jdbc:mariadb://143.106.243.64/";
     sql::Properties properties({{"user", "Si300A2024_03"},{"password", "4CPg3dKPcr"}});
@@ -44,7 +44,7 @@ Serie* DBconnection::getData(const std::unique_ptr<sql::Connection> &conn,int ro
         cout << serie->getNome() << " inserida no banco de dados virtual" << endl;
         return serie;
 }
-void DBconnection::insertData(const std::unique_ptr<sql::Connection> &conn,Serie* serie) {
+ void DBconnection::insertData(const std::unique_ptr<sql::Connection> &conn,Serie* serie) {
     cout << "Inserindo a Série " << serie->getNome() << endl;
     std::unique_ptr<sql::Statement> stmnt(conn->createStatement());
     stmnt->executeQuery("USE Si300A2024_03;");
@@ -58,5 +58,7 @@ void DBconnection::insertData(const std::unique_ptr<sql::Connection> &conn,Serie
                    serie->getPersonagensPrincipais() + "','" +
                    serie->getCanal() + "','" +
                    to_string(serie->getNota()) + "')";
+
     stmnt->executeQuery(query);
+    cout << "Serie" << serie->getNome() << "inserida no banco de dados" << endl;
 }

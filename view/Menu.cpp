@@ -12,6 +12,7 @@ Menu::Menu(SerieController *serieController)
   try {
     cout << "Começando leitura do banco de dados" << endl;
     this->conector = db->createconnection(db->url,db->properties);
+    db->conector = &this->conector;
   }
   catch (sql::SQLException& e) {
     cout << "Erro com banco de dados, apenas banco em memória disponível" << endl;
@@ -22,10 +23,6 @@ Menu::Menu(SerieController *serieController)
 
 Menu::~Menu()
 {
-  if(hasDatabase == true) {
-    cout << "Inserindo no banco de dados" << endl;
-    this->insertDatabase();
-  }
   cout << "Desligando" << endl;
   delete serieController;
 }
@@ -42,15 +39,6 @@ void Menu::series() const
   vector<string> menuItens{"Adicionar Serie", "Listar Series", "Adicionar Dados - Apenas para fins de teste"};
   vector<void (Menu::*)() const> functions{&Menu::addSerie, &Menu::listSeries, &Menu::AddData};
   launchActions("Series", menuItens, functions);
-}
-void Menu::insertDatabase() const {
-  int i = 0;
-  vector<Serie*> listaseries = serieController->listSeries();
-  while(i < listaseries.size()) {
-    db->insertData(conector,listaseries[i]);
-    i++;
-  }
-  cout << i <<" Series foram colocadas no banco" << endl;
 }
 void Menu::getDatabase() const {
   int i = 0;
@@ -119,7 +107,12 @@ void Menu::addSerie() const
       canal,
       nota);
 
+  if(hasDatabase == true){
+  vector<Serie*> temp;
+  temp=(this->serieController->listSeries());
+  db->insertData(conector,*temp.end());
   this->serieController->addSerie(addSerieDTO);
+  }
 }
 void Menu::AddData() const{
   AddSerieDTO* a = new AddSerieDTO("Breaking Bad",2008,1,7,"Bryn Cranston","Walter White","AMC",9);
@@ -128,6 +121,11 @@ void Menu::AddData() const{
   this->serieController->addSerie(a);
   this->serieController->addSerie(b);
   this->serieController->addSerie(c);
+  for(int i = 0; i < this->serieController->listSeries().size(); i++){
+    Serie* temp;
+    temp = (this->serieController->listSeries())[i];
+    db->insertData(conector,temp);
+  }
   cout << "Dados Adicionados" << endl;
 }
 

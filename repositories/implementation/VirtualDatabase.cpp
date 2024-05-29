@@ -6,6 +6,7 @@ using namespace std;
 void VirtualDatabase::addSerie(Serie *serie)
 {
   int id = database.size() + 1;
+  serie->setId(id);
   pair<int, Serie> tuple(id, *serie);
 
   database.insert(tuple);

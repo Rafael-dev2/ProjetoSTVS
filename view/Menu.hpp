@@ -21,7 +21,6 @@ class Menu
   public:
     Menu(SerieController *serieController);
     ~Menu();
-    void insertDatabase() const;
     void getDatabase() const;
     void Help() const;
     void Credits() const;

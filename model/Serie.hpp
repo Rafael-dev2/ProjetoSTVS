@@ -1,6 +1,7 @@
 #ifndef SERIE_HPP
 #define SERIE_HPP
 
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -21,7 +22,7 @@ private:
 public:
     Serie(int, string, int, int, int, string, string, string, int);
     Serie(string, int, int, int, string, string, string, int);
-
+    ~Serie() {};
     int getId() const;
     void setId(int id);
 
