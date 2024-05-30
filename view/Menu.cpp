@@ -48,14 +48,10 @@ void Menu::getDatabase() const {
   sql::ResultSet *size = stmnt->executeQuery("SELECT * FROM SERIES");
   while(size->next()) {
     serie = db->getData(conector,i);
-    cout << i << endl;
-    cout << "adicionando serie" << endl;
-    cout << serie->getNome() << endl;
     serieController->addSerie(serie);
-    cout << "serie adicionada" << endl;
     i++;
   }
-  cout << i <<" Series foram extraidas do banco" << endl;
+  cout <<"Todas as séries foram extraidas do banco" << endl;
 }
 
 void Menu::addSerie() const
@@ -106,13 +102,20 @@ void Menu::addSerie() const
       personagensPrincipais,
       canal,
       nota);
-
-  if(hasDatabase == true){
-  vector<Serie*> temp;
-  temp=(this->serieController->listSeries());
-  db->insertData(conector,*temp.end());
   this->serieController->addSerie(addSerieDTO);
+  if(hasDatabase == true){
+      Serie* temp = new Serie(nome,
+      anoDeLancamento,
+      temporada,
+      numEpisodios,
+      principaisAtores,
+      personagensPrincipais,
+      canal,
+      nota);
+      db->insertData(conector,temp);
+      cin.ignore();
   }
+
 }
 void Menu::AddData() const{
   AddSerieDTO* a = new AddSerieDTO("Breaking Bad",2008,1,7,"Bryn Cranston","Walter White","AMC",9);
@@ -167,7 +170,6 @@ void Menu::launchActions(string title, vector<string> menuItems, vector<void (Me
     {
       cout << i + 1 << " - " << menuItems[i] << endl;
     }
-
     cout << "0 - Sair" << endl;
     cin >> option;
 

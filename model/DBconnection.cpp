@@ -41,7 +41,6 @@ Serie* DBconnection::getData(const std::unique_ptr<sql::Connection> &conn,int ro
         cnl = lis->getString(8).c_str();
         rate = (int)lis->getInt(9);
         Serie* serie = new Serie(id,name,year,season,eps,act,chr,cnl,rate);
-        cout << serie->getNome() << " inserida no banco de dados virtual" << endl;
         return serie;
 }
  void DBconnection::insertData(const std::unique_ptr<sql::Connection> &conn,Serie* serie) {
@@ -60,5 +59,5 @@ Serie* DBconnection::getData(const std::unique_ptr<sql::Connection> &conn,int ro
                    to_string(serie->getNota()) + "')";
 
     stmnt->executeQuery(query);
-    cout << "Serie" << serie->getNome() << "inserida no banco de dados" << endl;
+    cout << "Serie" << serie->getNome() << " inserida no banco de dados com sucesso" << endl;
 }
