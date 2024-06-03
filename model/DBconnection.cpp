@@ -12,12 +12,13 @@ DBconnection::DBconnection(){
     this->driver = sql::mariadb::get_driver_instance();
     // Configure Connection
     // Configuração propria
-    this->url = "jdbc:mariadb://localhost:3306/";
-    this->properties = {{"user", "Si300A2024_03"},{"password", "102030"}};
-    /*Configurações da FT
+    //this->url = "jdbc:mariadb://localhost:3306/";
+    //this->properties = {{"user", "Si300A2024_04"},{"password", "102030"}};
+    //Configurações da FT
     this->url = "jdbc:mariadb://143.106.243.64/";
     sql::Properties properties({{"user", "Si300A2024_03"},{"password", "4CPg3dKPcr"}});
-    */
+    this->properties = properties;
+
 };
 std::unique_ptr<sql::Connection> DBconnection::createconnection(const sql::SQLString& url,const sql::Properties properties) {
     std::unique_ptr<sql::Connection> conn(driver->connect(url, properties));

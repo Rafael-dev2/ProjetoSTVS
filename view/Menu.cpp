@@ -51,7 +51,9 @@ void Menu::getDatabase() const {
     serieController->addSerie(serie);
     i++;
   }
+  if( i != 0){
   cout <<"Todas as séries foram extraidas do banco" << endl;
+  }
 }
 
 void Menu::addSerie() const
