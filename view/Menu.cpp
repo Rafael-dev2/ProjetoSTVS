@@ -107,10 +107,21 @@ void Menu::listSeries() const
   string channelTitle = " Canal";
   string yearTitle = " Ano";
   string ratingTitle = " Nota";
-  
+
+   vector<int> lengths;
+   lengths.push_back(idTitle.length());
+   lengths.push_back(nameTitle.length());
+   lengths.push_back(tempTitle.length());
+   lengths.push_back(episodesTitle.length());
+   lengths.push_back(actorsTitle.length());
+   lengths.push_back(charactersTitle.length());
+   lengths.push_back(channelTitle.length());
+   lengths.push_back(yearTitle.length());
+   lengths.push_back(ratingTitle.length());
+
   int maxId = idTitle.length(), 
     maxName = nameTitle.length(), 
-    maxTemp = tempTitle.length(), 
+    maxTemp = tempTitle.length(),
     maxEp = episodesTitle.length(), 
     maxActors = actorsTitle.length(), 
     maxMain = charactersTitle.length(),
@@ -118,89 +129,73 @@ void Menu::listSeries() const
     maxYear = yearTitle.length(),
     maxRating = ratingTitle.length();
 
-  for (auto serie : series)
+  for (int i = 0; i < series.size();i++)
   {
-    int idLength = to_string(serie->getId()).length();
-    int nameLength = serie->getNome().length();
-    int tempLength = to_string(serie->getTemporada()).length();
-    int epLength = to_string(serie->getNumEpisodios()).length();
-    int actorsLength = serie->getPrincipaisAtores().length();
-    int mainLength = serie->getPersonagensPrincipais().length();
-    int channelLength = serie->getCanal().length();
+    int idLength = to_string(series[i]->getId()).length();
+    cout << idLength << endl;;
+    int nameLength = series[i]->getNome().length();
+    int tempLength = to_string(series[i]->getTemporada()).length();
+    int epLength = to_string(series[i]->getNumEpisodios()).length();
+    int actorsLength = series[i]->getPrincipaisAtores().length();
+    int mainLength = series[i]->getPersonagensPrincipais().length();
+    int channelLength = series[i]->getCanal().length();
 
-    maxId = idLength > maxId ? idLength : maxId;
-    maxName = nameLength > maxName ? nameLength : maxName;
-    maxTemp = tempLength > maxTemp ? tempLength : maxTemp;
-    maxEp = epLength > maxEp ? epLength : maxEp;
-    maxActors = actorsLength > maxActors ? actorsLength : maxActors;
-    maxMain = mainLength > maxMain ? mainLength : maxMain;
-    maxChannel = channelLength > maxChannel ? channelLength : maxChannel;
+    lengths[0] = idLength > lengths[0] ? idLength : lengths[0];
+    lengths[1] = nameLength > lengths[1] ? nameLength : lengths[1];
+    lengths[2] = tempLength > lengths[2] ? tempLength : lengths[2];
+    lengths[3] = epLength > lengths[3] ? epLength : lengths[3];
+    lengths[4] = actorsLength > lengths[4] ? actorsLength : lengths[4];
+    lengths[5] = mainLength > lengths[5] ? mainLength : lengths[5];
+    lengths[6] = channelLength > lengths[6] ? channelLength : lengths[6];
   }
 
-  maxId += 2, 
-  maxName += 2, 
-  maxTemp += 2, 
-  maxEp += 2, 
-  maxActors += 2, 
-  maxMain += 2,
-  maxChannel += 2,
-  maxYear += 2,
-  maxRating += 2;
+  for(int i = 0;i < lengths.size(); i++){
+  lengths[i] += 2;
+}
 
-  cout << '+' << this->replicate('-', maxId);
-  cout << '+' << this->replicate('-', maxName);
-  cout << '+' << this->replicate('-', maxTemp);
-  cout << '+' << this->replicate('-', maxEp);
-  cout << '+' << this->replicate('-', maxActors);
-  cout << '+' << this->replicate('-', maxMain);
-  cout << '+' << this->replicate('-', maxChannel);
-  cout << '+' << this->replicate('-', maxYear);
-  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
+  for (auto length : lengths){
+  cout << '+' << this->replicate('-', length);
+  }
+  cout << '+' << endl;
 
-  cout << '|' << idTitle << this->replicate(' ', maxId - idTitle.length()) << '|'; 
-  cout << nameTitle << this->replicate(' ', maxName - nameTitle.length()) << '|'; 
-  cout << tempTitle << this->replicate(' ', maxTemp - tempTitle.length()) << '|'; 
-  cout << episodesTitle << this->replicate(' ', maxEp - episodesTitle.length()) << '|'; 
-  cout << actorsTitle << this->replicate(' ', maxActors - actorsTitle.length()) << '|'; 
-  cout << charactersTitle << this->replicate(' ', maxMain - charactersTitle.length()) << '|';
-  cout << channelTitle << this->replicate(' ', maxChannel - channelTitle.length()) << '|'; 
-  cout << yearTitle << this->replicate(' ', maxYear - yearTitle.length()) << '|'; 
-  cout << ratingTitle << this->replicate(' ', maxRating - ratingTitle.length()) << '|' << endl;
+  cout << '|' << idTitle << this->replicate(' ', lengths[0] - idTitle.length()) << '|';
+  cout << nameTitle << this->replicate(' ', lengths[1] - nameTitle.length()) << '|';
+  cout << tempTitle << this->replicate(' ', lengths[2] - tempTitle.length()) << '|';
+  cout << episodesTitle << this->replicate(' ', lengths[3] - episodesTitle.length()) << '|';
+  cout << actorsTitle << this->replicate(' ', lengths[4] - actorsTitle.length()) << '|';
+  cout << charactersTitle << this->replicate(' ', lengths[5] - charactersTitle.length()) << '|';
+  cout << channelTitle << this->replicate(' ', lengths[6] - channelTitle.length()) << '|';
+  cout << yearTitle << this->replicate(' ', lengths[7] - yearTitle.length()) << '|';
+  cout << ratingTitle << this->replicate(' ', lengths[8] - ratingTitle.length()) << '|' << endl;
 
-  cout << '+' << this->replicate('-', maxId);
-  cout << '+' << this->replicate('-', maxName);
-  cout << '+' << this->replicate('-', maxTemp);
-  cout << '+' << this->replicate('-', maxEp);
-  cout << '+' << this->replicate('-', maxActors);
-  cout << '+' << this->replicate('-', maxMain);
-  cout << '+' << this->replicate('-', maxChannel);
-  cout << '+' << this->replicate('-', maxYear);
-  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
+  for (auto length : lengths){
+  cout << '+' << this->replicate('-', length);
+  }
+  cout << '+' << endl;
 
   string defaultSpacing = this->replicate(' ', 5);
-
+  string a = "";
   for (auto serie : series)
   {
-    cout << '|' << ' ' << serie->getId() << this->replicate(' ', maxId - to_string(serie->getId()).length() - 1) << '|'; 
-    cout << ' ' << serie->getNome() << this->replicate(' ', maxName - serie->getNome().length() - 1) << '|'; 
-    cout << ' ' << serie->getTemporada() << this->replicate(' ', maxTemp - to_string(serie->getTemporada()).length() - 1) << '|'; 
-    cout << ' ' << serie->getNumEpisodios() << this->replicate(' ', maxEp - to_string(serie->getNumEpisodios()).length() - 1) << '|'; 
-    cout << ' ' << serie->getPrincipaisAtores() << this->replicate(' ', maxActors - serie->getPrincipaisAtores().length() - 1) << '|'; 
-    cout << ' ' << serie->getPersonagensPrincipais() << this->replicate(' ', maxMain - serie->getPersonagensPrincipais().length() - 1) << '|';
-    cout << ' ' << serie->getCanal() << this->replicate(' ', maxChannel - serie->getCanal().length() - 1) << '|'; 
-    cout << ' ' << serie->getAnoDeLancamento() << this->replicate(' ', maxYear - to_string(serie->getAnoDeLancamento()).length() - 1) << '|'; 
-    cout << ' ' << serie->getNota() << this->replicate(' ', maxRating - to_string(serie->getNota()).length() - 1) << '|' << endl;
+    int nm = (lengths[1] == (serie->getNome().length() + 2)) ? -1 : 1;
+    int ac = (lengths[4] == serie->getPrincipaisAtores().length() + 2) ? - 1 : 1;
+    int cr = (lengths[5] == serie->getPersonagensPrincipais().length() + 2) ? -1 : 1;
+    int ch = (lengths[6] == serie->getCanal().length() + 2) ? -1 : 1;
+    cout << '|' << ' ' << serie->getId() << this->replicate(' ', lengths[0] - to_string(serie->getId()).length() - 1) << '|';
+    cout << ' ' << serie->getNome() << this->replicate(' ', lengths[1] - serie->getNome().length() - nm ) << '|';
+    cout << ' ' << serie->getTemporada() << this->replicate(' ', lengths[2] - to_string(serie->getTemporada()).length() - 1) << '|';
+    cout << ' ' << serie->getNumEpisodios() << this->replicate(' ', lengths[3] - to_string(serie->getNumEpisodios()).length() - 1) << '|';
+    cout << ' ' << serie->getPrincipaisAtores() << this->replicate(' ', lengths[4] - serie->getPrincipaisAtores().length() - ac) << '|';
+    cout << ' ' << serie->getPersonagensPrincipais() << this->replicate(' ', lengths[5] - serie->getPersonagensPrincipais().length() - cr) << '|';
+    cout << ' ' << serie->getCanal() << this->replicate(' ', lengths[6] - serie->getCanal().length() - ch) << '|';
+    cout << ' ' << serie->getAnoDeLancamento() << this->replicate(' ', lengths[7] - to_string(serie->getAnoDeLancamento()).length() - 1) << '|';
+    cout << ' ' << serie->getNota() << this->replicate(' ', lengths[8] - to_string(serie->getNota()).length() - 1) << '|' << endl;
   }
 
-  cout << '+' << this->replicate('-', maxId);
-  cout << '+' << this->replicate('-', maxName);
-  cout << '+' << this->replicate('-', maxTemp);
-  cout << '+' << this->replicate('-', maxEp);
-  cout << '+' << this->replicate('-', maxActors);
-  cout << '+' << this->replicate('-', maxMain);
-  cout << '+' << this->replicate('-', maxChannel);
-  cout << '+' << this->replicate('-', maxYear);
-  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
+  for (auto length : lengths){
+  cout << '+' << this->replicate('-', length);
+  }
+  cout << '+' << endl;
 
   Utils::freezeScreen();
 }

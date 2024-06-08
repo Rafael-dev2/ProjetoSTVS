@@ -6,8 +6,8 @@
 
 using namespace std;
 
-const string MariaDBConnection::databaseName = "stvs";
-// const string MariaDBConnection::databaseName = "Si300A2024_03";
+//const string MariaDBConnection::databaseName = "stvs";
+ const string MariaDBConnection::databaseName = "Si300A2024_03";
 
 MariaDBConnection::MariaDBConnection()
 {
