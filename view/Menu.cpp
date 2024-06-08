@@ -126,11 +126,13 @@ void Menu::AddData() const{
   this->serieController->addSerie(a);
   this->serieController->addSerie(b);
   this->serieController->addSerie(c);
+  if(hasDatabase == true){
   for(int i = 0; i < this->serieController->listSeries().size(); i++){
     Serie* temp;
     temp = (this->serieController->listSeries())[i];
     db->insertData(conector,temp);
   }
+}
   cout << "Dados Adicionados" << endl;
 }
 
