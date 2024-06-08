@@ -1,4 +1,5 @@
 #include "./Menu.hpp"
+#include "../utils/Utils.hpp"
 #include <iostream>
 #include <math.h>
 #include "../controller/dto/AddSerieDTO.hpp"
@@ -95,6 +96,7 @@ void Menu::AddData() const
 
 void Menu::listSeries() const
 {
+  
   cout << "Listar Series" << endl;
 
   vector<Serie *> series = this->serieController->listSeries();
@@ -112,34 +114,33 @@ void Menu::listSeries() const
     cout << "Nota: " << serie->getNota() << endl;
     cout << "!-----------------------------------------------------------!" << endl;
   }
+
+  Utils::freezeScreen();
 }
 void Menu::Help() const{
   Textos::exibirTexto("./help.txt");
+  Utils::freezeScreen();
 }
+
 void Menu::Credits() const{
   Textos::exibirTexto("./credits.txt");
+  Utils::freezeScreen();
 }
+
 void Menu::launchActions(string title, vector<string> menuItems, vector<void (Menu::*)() const> actions) const
 {
   int option = 0;
-  string leaveText = "0 - Sair";
-  const string decorator = this->makeDecorator(menuItems);
 
-string message = "Insira a opção: ";
+  string leaveText = to_string(option) + " - Sair";
+  string message = "Insira a opção: ";
 
-  int width = max(title.length(), message.length());
+  int width = Utils::calculateWidth(title, message, menuItems);
 
-  for (string menuItemTitle : menuItems)
-  {
-    int menuItemTitleLength = menuItemTitle.length();
-    width = width >= menuItemTitleLength ? width : menuItemTitleLength;
-  }
-
-  width += 4 + (log10(menuItems.size()));
+  const string decorator = this->replicate('*', width);
 
   do
   {
-    this->clearScreen();
+    Utils::clearScreen();
 
     cout << decorator << endl;
     this->print(title, width);
@@ -152,6 +153,8 @@ string message = "Insira a opção: ";
     }
 
     this->print(leaveText, width);
+    cout << decorator << endl;
+    cout << message;
     cin >> option;
 
     if (option == 0) {
@@ -168,27 +171,8 @@ void Menu::print(string actionTitle, int w) const
   int rest = w - titleSize;
 
   int spaces = round(rest / 2);
-  int finalSpaces = (rest % 2) != 0 ? spaces + 1 : spaces;
 
-  cout << '*' << this->replicate(' ', spaces) << actionTitle << this->replicate(' ', finalSpaces) << '*' << endl;
-}
-
-const string Menu::makeDecorator(vector<string> menuItems) const
-{
-  string title = "Program";
-  string message = "Insira a opção: ";
-
-  int width = max(title.length(), message.length());
-
-  for (string menuItemTitle : menuItems)
-  {
-    int menuItemTitleLength = menuItemTitle.length();
-    width = width >= menuItemTitleLength ? width : menuItemTitleLength;
-  }
-
-  width += 4 + (log10(menuItems.size()));
-
-  return this->replicate('*', width);
+  cout << '*' << this->replicate(' ', spaces) << actionTitle << endl;
 }
 
 const string Menu::replicate(char symbol, int length) const {
@@ -199,15 +183,3 @@ const string Menu::replicate(char symbol, int length) const {
 	}
 	return (buffer);
 }
-
-#ifdef _WIN32
-void Menu::clearScreen() const 
-{
-  system("cls");
-}
-#else
-void Menu::clearScreen() const 
-{
-  system("clear");
-}
-#endif

@@ -14,7 +14,6 @@ class Menu
   private:
     SerieController *serieController;
     void launchActions(string title, vector<string> menuItems, vector<void (Menu::*)() const> actions) const;
-    const string makeDecorator(vector<string> menuItems) const;
     const string replicate(char symbol, int length) const;
     void print(string, int) const;
 
@@ -28,8 +27,6 @@ class Menu
     void series() const;
     void addSerie() const;
     void listSeries() const;
-
-    void clearScreen() const;
 };
 
 #endif
