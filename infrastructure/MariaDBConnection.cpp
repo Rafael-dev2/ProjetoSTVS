@@ -6,6 +6,9 @@
 
 using namespace std;
 
+const string MariaDBConnection::databaseName = "stvs";
+// const string MariaDBConnection::databaseName = "Si300A2024_03";
+
 MariaDBConnection::MariaDBConnection()
 {
     // Instantiate Driver
@@ -13,20 +16,18 @@ MariaDBConnection::MariaDBConnection()
 
     // Configure Connection
     // Configuração propria
-    this->url = "jdbc:mariadb://localhost:3306/";
+    this->url = "jdbc:mariadb://localhost:3306/" + MariaDBConnection::databaseName;
     sql::Properties properties({{"user", "root"},
                                 {"password", "docker"}});
 
     // Configurações da FT
-    //  this->url = "jdbc:mariadb://143.106.243.64/";
+    //  this->url = "jdbc:mariadb://143.106.243.64/ + MariaDBConnection::databaseName";
     //  sql::Properties properties({
     //      {"user", "Si300A2024_03"},
     //      {"password", "4CPg3dKPcr"}
     //  });
 
     this->properties = properties;
-    // this->databaseName = "Si300A2024_03";
-    this->databaseName = "stvs";
 };
 
 MariaDBConnection::MariaDBConnection(const sql::SQLString &url, const sql::Properties properties)
@@ -34,8 +35,6 @@ MariaDBConnection::MariaDBConnection(const sql::SQLString &url, const sql::Prope
     this->driver = sql::mariadb::get_driver_instance();
     this->url = url;
     this->properties = properties;
-    // this->databaseName = "Si300A2024_03";
-    this->databaseName = "stvs";
 };
 
 MariaDBConnection::~MariaDBConnection()
@@ -49,9 +48,4 @@ std::shared_ptr<sql::Connection> MariaDBConnection::getConnection()
     this->conector = conn;
 
     return conn;
-}
-
-string MariaDBConnection::getDatabaseName() const
-{
-    return this->databaseName;
 }

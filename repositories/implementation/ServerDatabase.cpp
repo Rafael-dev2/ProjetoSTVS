@@ -6,6 +6,12 @@
 
 using namespace std;
 
+const string ServerDatabase::ServerDatabase::tableName = "SERIES";
+
+const string ServerDatabase::SQL_InsertSerie = "INSERT INTO " + ServerDatabase::tableName + " (series_name, release_year, season, episode_count, main_actors, main_characters, network, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+const string ServerDatabase::SQL_UpdateSerie = "UPDATE " + ServerDatabase::tableName + " SET series_name = ?, release_year = ?, season = ?, episode_count = ?, main_actors = ?, main_characters = ?, network = ?, rating = ? WHERE internal_id = ?";
+const string ServerDatabase::SQL_GetSerie = "SELECT * FROM " + ServerDatabase::tableName + " WHERE internal_id = ?";
+
 ServerDatabase::ServerDatabase(MariaDBConnection *connection)
 {
   this->connectionProvider = connection;
@@ -19,49 +25,42 @@ ServerDatabase::~ServerDatabase()
 
 void ServerDatabase::addSerie(Serie *serie)
 {
-  auto stmnt = this->getStmnt();
-  
-  string query = "INSERT INTO SERIES VALUES('" +
-                  serie->getNome() + "','" +
-                  to_string(serie->getAnoDeLancamento()) + "','" +
-                  to_string(serie->getTemporada()) + "','" +
-                  to_string(serie->getNumEpisodios()) + "','" +
-                  serie->getPrincipaisAtores() + "','" +
-                  serie->getPersonagensPrincipais() + "','" +
-                  serie->getCanal() + "','" +
-                  to_string(serie->getNota()) + "')";
+  auto stmnt = this->getStmnt(ServerDatabase::SQL_InsertSerie);
 
-  stmnt->executeQuery(query);
+  stmnt->setString(1, serie->getNome());
+  stmnt->setInt(2, serie->getAnoDeLancamento());
+  stmnt->setInt(3, serie->getTemporada());
+  stmnt->setInt(4, serie->getNumEpisodios());
+  stmnt->setString(5, serie->getPrincipaisAtores());
+  stmnt->setString(6, serie->getPersonagensPrincipais());
+  stmnt->setString(7, serie->getCanal());
+  stmnt->setInt(8, serie->getNota());
+
+  stmnt->executeQuery();
 }
 
 void ServerDatabase::updateSerie(Serie *serie)
 {
-  auto stmnt = this->getStmnt();
+  auto stmnt = this->getStmnt(ServerDatabase::SQL_UpdateSerie);
 
-  string dbName = this->connectionProvider->getDatabaseName();
+  stmnt->setString(1, serie->getNome());
+  stmnt->setInt(2, serie->getAnoDeLancamento());
+  stmnt->setInt(3, serie->getTemporada());
+  stmnt->setInt(4, serie->getNumEpisodios());
+  stmnt->setString(5, serie->getPrincipaisAtores());
+  stmnt->setString(6, serie->getPersonagensPrincipais());
+  stmnt->setString(7, serie->getCanal());
+  stmnt->setInt(8, serie->getNota());
+  stmnt->setInt(9, serie->getId());
 
-  string query = "UPDATE " + dbName + " SET ";
-
-  query += "series_name = " + serie->getNome() + " ";
-  query += "release_year = " + to_string(serie->getAnoDeLancamento()) + " ";
-  query += "season = " + to_string(serie->getTemporada()) + " ";
-  query += "episode_count = " + to_string(serie->getNumEpisodios()) + " ";
-  query += "main_actors = " + serie->getPrincipaisAtores() + " ";
-  query += "main_characters = " + serie->getPersonagensPrincipais() + " ";
-  query += "network = " + serie->getCanal() + " ";
-  query += "rating = " +  to_string(serie->getNota()) + " ";
-  query += "WHERE internal_id = " + to_string(serie->getId()) + ";";
-
-  stmnt->executeQuery(query);
+  stmnt->executeQuery();
 }
 
 void ServerDatabase::deleteSerie(int id)
 {
   auto stmnt = this->getStmnt();
 
-  string dbName = this->connectionProvider->getDatabaseName();
-
-  string query = "DELETE FROM " + dbName;
+  string query = "DELETE FROM " + ServerDatabase::tableName;
   query += " WHERE internal_id = " + to_string(id) + ";";
 
   stmnt->executeQuery(query);
@@ -69,14 +68,11 @@ void ServerDatabase::deleteSerie(int id)
 
 Serie *ServerDatabase::findSerieById(int id) const
 {
-  auto stmnt = this->getStmnt();
+  auto stmnt = this->getStmnt(ServerDatabase::SQL_GetSerie);
 
-  string dbName = this->connectionProvider->getDatabaseName();
+  stmnt->setInt(1, id);
 
-  string query = "SELECT * FROM " + dbName;
-  query += " WHERE internal_id = " + to_string(id) + ";";
-
-  sql::ResultSet *lis = stmnt->executeQuery(query);
+  sql::ResultSet *lis = stmnt->executeQuery();
   lis->next();
 
   int serieId, year, season, eps, rate;
@@ -101,10 +97,8 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByTitle() const
 {
   auto stmnt = this->getStmnt();
 
-  string dbName = this->connectionProvider->getDatabaseName();
-
-  string query = "SELECT * FROM " + dbName;
-  query += " ORDER BY title;";
+  string query = "SELECT * FROM " + ServerDatabase::tableName;
+  query += " ORDER BY series_name;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
 
@@ -137,9 +131,7 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByChannel() const
 {
   auto stmnt = this->getStmnt();
 
-  string dbName = this->connectionProvider->getDatabaseName();
-
-  string query = "SELECT * FROM " + dbName;
+  string query = "SELECT * FROM " + ServerDatabase::tableName;
   query += " ORDER BY network;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
@@ -173,9 +165,7 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByYear() const
 {
   auto stmnt = this->getStmnt();
 
-  string dbName = this->connectionProvider->getDatabaseName();
-
-  string query = "SELECT * FROM " + dbName;
+  string query = "SELECT * FROM " + ServerDatabase::tableName;
   query += " ORDER BY release_year;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
@@ -209,9 +199,7 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByRating() const
 {
   auto stmnt = this->getStmnt();
 
-  string dbName = this->connectionProvider->getDatabaseName();
-
-  string query = "SELECT * FROM " + dbName;
+  string query = "SELECT * FROM " + ServerDatabase::tableName;
   query += " ORDER BY rating;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
@@ -244,10 +232,11 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByRating() const
 shared_ptr<sql::Statement> ServerDatabase::getStmnt() const
 {
   shared_ptr<sql::Statement> stmnt(this->connection->createStatement());
+  return stmnt;
+}
 
-  string useDatabaseStmnt = "USE " + this->connectionProvider->getDatabaseName() + ";"; 
-
-  stmnt->executeQuery(useDatabaseStmnt);
-
+shared_ptr<sql::PreparedStatement> ServerDatabase::getStmnt(const string query) const
+{
+  shared_ptr<sql::PreparedStatement> stmnt(this->connection->prepareStatement(query));
   return stmnt;
 }

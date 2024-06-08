@@ -1,5 +1,6 @@
 #include "./Menu.hpp"
 #include <iostream>
+#include <math.h>
 #include "../controller/dto/AddSerieDTO.hpp"
 #include "../infrastructure/MariaDBConnection.hpp"
 #include "../repositories/implementation/VirtualDatabase.hpp"
@@ -34,38 +35,38 @@ void Menu::addSerie() const
 {
   cout << "Adicionar Serie" << endl;
 
-  cout << "Nome..........:";
+  cout << "Nome..........: ";
   string nome;
   cin.ignore(); // Clear the newline character left in the buffer
   getline(cin, nome);
 
-  cout << "Ano de Lancamento..........:";
+  cout << "Ano de Lancamento..........: ";
   int anoDeLancamento;
   cin >> anoDeLancamento;
 
-  cout << "Temporada..........:";
+  cout << "Temporada..........: ";
   int temporada;
   cin >> temporada;
 
-  cout << "Numero de Episodios..........:";
+  cout << "Numero de Episodios..........: ";
   int numEpisodios;
   cin >> numEpisodios;
 
   cin.ignore(); // Clear the newline character left in the buffer
 
-  cout << "Principais Atores..........:";
+  cout << "Principais Atores..........: ";
   string principaisAtores;
   getline(cin, principaisAtores);
 
-  cout << "Personagens Principais..........:";
+  cout << "Personagens Principais..........: ";
   string personagensPrincipais;
   getline(cin, personagensPrincipais);
 
-  cout << "Canal..........:";
+  cout << "Canal..........: ";
   string canal;
   getline(cin, canal);
 
-  cout << "Nota..........:";
+  cout << "Nota..........: ";
   int nota;
   cin >> nota;
 
@@ -121,16 +122,36 @@ void Menu::Credits() const{
 void Menu::launchActions(string title, vector<string> menuItems, vector<void (Menu::*)() const> actions) const
 {
   int option = 0;
+  string leaveText = "0 - Sair";
+  const string decorator = this->makeDecorator(menuItems);
+
+string message = "Insira a opção: ";
+
+  int width = max(title.length(), message.length());
+
+  for (string menuItemTitle : menuItems)
+  {
+    int menuItemTitleLength = menuItemTitle.length();
+    width = width >= menuItemTitleLength ? width : menuItemTitleLength;
+  }
+
+  width += 4 + (log10(menuItems.size()));
 
   do
   {
-    cout << title << endl;
+    this->clearScreen();
+
+    cout << decorator << endl;
+    this->print(title, width);
+    cout << decorator << endl;
 
     for (int i = 0; i < menuItems.size(); i++)
     {
-      cout << i + 1 << " - " << menuItems[i] << endl;
+      string line = to_string(i + 1) + " - " + menuItems[i];
+      this->print(line, width);
     }
-    cout << "0 - Sair" << endl;
+
+    this->print(leaveText, width);
     cin >> option;
 
     if (option == 0) {
@@ -140,3 +161,53 @@ void Menu::launchActions(string title, vector<string> menuItems, vector<void (Me
     (this->*actions.at(option - 1))();
   } while (option != 0);
 }
+
+void Menu::print(string actionTitle, int w) const 
+{
+  int titleSize = actionTitle.length();
+  int rest = w - titleSize;
+
+  int spaces = round(rest / 2);
+  int finalSpaces = (rest % 2) != 0 ? spaces + 1 : spaces;
+
+  cout << '*' << this->replicate(' ', spaces) << actionTitle << this->replicate(' ', finalSpaces) << '*' << endl;
+}
+
+const string Menu::makeDecorator(vector<string> menuItems) const
+{
+  string title = "Program";
+  string message = "Insira a opção: ";
+
+  int width = max(title.length(), message.length());
+
+  for (string menuItemTitle : menuItems)
+  {
+    int menuItemTitleLength = menuItemTitle.length();
+    width = width >= menuItemTitleLength ? width : menuItemTitleLength;
+  }
+
+  width += 4 + (log10(menuItems.size()));
+
+  return this->replicate('*', width);
+}
+
+const string Menu::replicate(char symbol, int length) const {
+  string buffer;
+	for (int count = 0; count < length; count++)
+	{
+		buffer += symbol;
+	}
+	return (buffer);
+}
+
+#ifdef _WIN32
+void Menu::clearScreen() const 
+{
+  system("cls");
+}
+#else
+void Menu::clearScreen() const 
+{
+  system("clear");
+}
+#endif

@@ -19,7 +19,8 @@ private:
     sql::Properties properties;
     sql::Driver *driver;
     std::shared_ptr<sql::Connection> conector;
-    string databaseName; 
+
+    static const string databaseName;
 
 public:    
     MariaDBConnection();

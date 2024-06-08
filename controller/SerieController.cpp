@@ -25,10 +25,12 @@ void SerieController::addSerie(AddSerieDTO *addSerieDTO)
 
   seriesDAO->addSerie(serie);
 }
+
 void SerieController::addSerie(Serie* serie)
 {
   seriesDAO->addSerie(serie);
 }
+
 vector<Serie *> SerieController::listSeries() const
 {
   return seriesDAO->listSeriesAndOrderByTitle();
