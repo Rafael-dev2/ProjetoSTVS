@@ -31,7 +31,7 @@ void SerieController::addSerie(Serie* serie)
   seriesDAO->addSerie(serie);
 }
 
-vector<Serie *> SerieController::listSeries() const
+vector<Serie *> SerieController::listSeriesByTitle() const
 {
   return seriesDAO->listSeriesAndOrderByTitle();
 }

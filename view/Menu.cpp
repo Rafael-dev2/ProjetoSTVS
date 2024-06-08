@@ -96,24 +96,111 @@ void Menu::AddData() const
 
 void Menu::listSeries() const
 {
-  
-  cout << "Listar Series" << endl;
+  vector<Serie *> series = this->serieController->listSeriesByTitle();
 
-  vector<Serie *> series = this->serieController->listSeries();
+  string idTitle = " Id";
+  string nameTitle = " Nome";
+  string tempTitle = " Temporada";
+  string episodesTitle = " Episodios";
+  string actorsTitle = " Principais Atores";
+  string charactersTitle = " Personagens Principais";
+  string channelTitle = " Canal";
+  string yearTitle = " Ano";
+  string ratingTitle = " Nota";
+  
+  int maxId = idTitle.length(), 
+    maxName = nameTitle.length(), 
+    maxTemp = tempTitle.length(), 
+    maxEp = episodesTitle.length(), 
+    maxActors = actorsTitle.length(), 
+    maxMain = charactersTitle.length(),
+    maxChannel = channelTitle.length(),
+    maxYear = yearTitle.length(),
+    maxRating = ratingTitle.length();
 
   for (auto serie : series)
   {
-    cout << "!-----------------------------------------------------------!" << endl;
-    cout << "Nome: " << serie->getNome() << endl;
-    cout << "Ano de Lancamento: " << serie->getAnoDeLancamento() << endl;
-    cout << "Temporada: " << serie->getTemporada() << endl;
-    cout << "Numero de Episodios: " << serie->getNumEpisodios() << endl;
-    cout << "Principais Atores: " << serie->getPrincipaisAtores() << endl;
-    cout << "Personagens Principais: " << serie->getPersonagensPrincipais() << endl;
-    cout << "Canal: " << serie->getCanal() << endl;
-    cout << "Nota: " << serie->getNota() << endl;
-    cout << "!-----------------------------------------------------------!" << endl;
+    int idLength = to_string(serie->getId()).length();
+    int nameLength = serie->getNome().length();
+    int tempLength = to_string(serie->getTemporada()).length();
+    int epLength = to_string(serie->getNumEpisodios()).length();
+    int actorsLength = serie->getPrincipaisAtores().length();
+    int mainLength = serie->getPersonagensPrincipais().length();
+    int channelLength = serie->getCanal().length();
+
+    maxId = idLength > maxId ? idLength : maxId;
+    maxName = nameLength > maxName ? nameLength : maxName;
+    maxTemp = tempLength > maxTemp ? tempLength : maxTemp;
+    maxEp = epLength > maxEp ? epLength : maxEp;
+    maxActors = actorsLength > maxActors ? actorsLength : maxActors;
+    maxMain = mainLength > maxMain ? mainLength : maxMain;
+    maxChannel = channelLength > maxChannel ? channelLength : maxChannel;
   }
+
+  maxId += 2, 
+  maxName += 2, 
+  maxTemp += 2, 
+  maxEp += 2, 
+  maxActors += 2, 
+  maxMain += 2,
+  maxChannel += 2,
+  maxYear += 2,
+  maxRating += 2;
+
+  cout << '+' << this->replicate('-', maxId);
+  cout << '+' << this->replicate('-', maxName);
+  cout << '+' << this->replicate('-', maxTemp);
+  cout << '+' << this->replicate('-', maxEp);
+  cout << '+' << this->replicate('-', maxActors);
+  cout << '+' << this->replicate('-', maxMain);
+  cout << '+' << this->replicate('-', maxChannel);
+  cout << '+' << this->replicate('-', maxYear);
+  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
+
+  cout << '|' << idTitle << this->replicate(' ', maxId - idTitle.length()) << '|'; 
+  cout << nameTitle << this->replicate(' ', maxName - nameTitle.length()) << '|'; 
+  cout << tempTitle << this->replicate(' ', maxTemp - tempTitle.length()) << '|'; 
+  cout << episodesTitle << this->replicate(' ', maxEp - episodesTitle.length()) << '|'; 
+  cout << actorsTitle << this->replicate(' ', maxActors - actorsTitle.length()) << '|'; 
+  cout << charactersTitle << this->replicate(' ', maxMain - charactersTitle.length()) << '|';
+  cout << channelTitle << this->replicate(' ', maxChannel - channelTitle.length()) << '|'; 
+  cout << yearTitle << this->replicate(' ', maxYear - yearTitle.length()) << '|'; 
+  cout << ratingTitle << this->replicate(' ', maxRating - ratingTitle.length()) << '|' << endl;
+
+  cout << '+' << this->replicate('-', maxId);
+  cout << '+' << this->replicate('-', maxName);
+  cout << '+' << this->replicate('-', maxTemp);
+  cout << '+' << this->replicate('-', maxEp);
+  cout << '+' << this->replicate('-', maxActors);
+  cout << '+' << this->replicate('-', maxMain);
+  cout << '+' << this->replicate('-', maxChannel);
+  cout << '+' << this->replicate('-', maxYear);
+  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
+
+  string defaultSpacing = this->replicate(' ', 5);
+
+  for (auto serie : series)
+  {
+    cout << '|' << ' ' << serie->getId() << this->replicate(' ', maxId - to_string(serie->getId()).length() - 1) << '|'; 
+    cout << ' ' << serie->getNome() << this->replicate(' ', maxName - serie->getNome().length() - 1) << '|'; 
+    cout << ' ' << serie->getTemporada() << this->replicate(' ', maxTemp - to_string(serie->getTemporada()).length() - 1) << '|'; 
+    cout << ' ' << serie->getNumEpisodios() << this->replicate(' ', maxEp - to_string(serie->getNumEpisodios()).length() - 1) << '|'; 
+    cout << ' ' << serie->getPrincipaisAtores() << this->replicate(' ', maxActors - serie->getPrincipaisAtores().length() - 1) << '|'; 
+    cout << ' ' << serie->getPersonagensPrincipais() << this->replicate(' ', maxMain - serie->getPersonagensPrincipais().length() - 1) << '|';
+    cout << ' ' << serie->getCanal() << this->replicate(' ', maxChannel - serie->getCanal().length() - 1) << '|'; 
+    cout << ' ' << serie->getAnoDeLancamento() << this->replicate(' ', maxYear - to_string(serie->getAnoDeLancamento()).length() - 1) << '|'; 
+    cout << ' ' << serie->getNota() << this->replicate(' ', maxRating - to_string(serie->getNota()).length() - 1) << '|' << endl;
+  }
+
+  cout << '+' << this->replicate('-', maxId);
+  cout << '+' << this->replicate('-', maxName);
+  cout << '+' << this->replicate('-', maxTemp);
+  cout << '+' << this->replicate('-', maxEp);
+  cout << '+' << this->replicate('-', maxActors);
+  cout << '+' << this->replicate('-', maxMain);
+  cout << '+' << this->replicate('-', maxChannel);
+  cout << '+' << this->replicate('-', maxYear);
+  cout << '+' << this->replicate('-', maxRating) << '+' << endl;
 
   Utils::freezeScreen();
 }
@@ -135,7 +222,6 @@ void Menu::launchActions(string title, vector<string> menuItems, vector<void (Me
   string message = "Insira a opção: ";
 
   int width = Utils::calculateWidth(title, message, menuItems);
-
   const string decorator = this->replicate('*', width);
 
   do
@@ -161,6 +247,7 @@ void Menu::launchActions(string title, vector<string> menuItems, vector<void (Me
       break;
     }
 
+    Utils::clearScreen();
     (this->*actions.at(option - 1))();
   } while (option != 0);
 }
