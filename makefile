@@ -1,15 +1,15 @@
 #Makefile para STVS
 all : STVS
-STVS : ./model/Serie.cpp ./repositories/SeriesDAO.hpp ./repositories/implementation/VirtualDatabase.cpp main.cpp ./view/Menu.cpp  ./view/Textos.hpp ./controller/SerieController.cpp ./model/DBconnection.cpp ./controller/dto/AddSerieDTO.cpp ./controller/dto/AddSerieDTO.hpp
+STVS: ./model/Serie.cpp ./model/Serie.hpp ./repositories/implementation/VirtualDatabase.cpp ./repositories/implementation/VirtualDatabase.hpp ./repositories/implementation/ServerDatabase.cpp ./repositories/implementation/ServerDatabase.hpp ./controller/dto/AddSerieDTO.cpp ./controller/dto/AddSerieDTO.hpp ./view/Menu.cpp ./view/Menu.hpp ./controller/SerieController.cpp ./controller/SerieController.hpp ./infrastructure/MariaDBConnection.cpp ./infrastructure/MemoryDBConnection.hpp  
 	g++ ./model/Serie.cpp \
-    ./repositories/SeriesDAO.hpp \
     ./repositories/implementation/VirtualDatabase.cpp \
-    main.cpp \
+    ./repositories/implementation/ServerDatabase.cpp \
+    ./controller/dto/AddSerieDTO.cpp \
     ./view/Menu.cpp  \
-    ./view/Textos.hpp  \
     ./controller/SerieController.cpp  \
-    ./model/DBconnection.cpp \
-    ./controller/dto/AddSerieDTO.cpp -o STVS -lmariadbcpp
+    ./infrastructure/MariaDBConnection.cpp \
+    ./infrastructure/MemoryDBConnection.hpp \
+    main.cpp -o STVS -lmariadbcpp
 run: STVS
 	./STVS
 clean:

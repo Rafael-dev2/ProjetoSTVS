@@ -1,14 +1,19 @@
 #include <iostream>
 #include "./repositories/SeriesDAO.hpp"
-#include "./repositories/implementation/VirtualDatabase.hpp"
+#include "./repositories/implementation/ServerDatabase.hpp"
 #include "./view/Menu.hpp"
-#include "./model/DBconnection.hpp"
+#include "./infrastructure/MariaDBConnection.hpp"
 
 using namespace std;
 int main() {
-    SeriesDAO *seriesDAO = new VirtualDatabase();
+    MariaDBConnection *connection = new MariaDBConnection();
+
+    SeriesDAO *seriesDAO = new ServerDatabase(connection);
     Menu *menu = new Menu(new SerieController(seriesDAO));
+    
     menu->start();
+    
+    delete seriesDAO;
     delete menu;
     return 0;
 }

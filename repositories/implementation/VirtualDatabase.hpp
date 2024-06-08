@@ -7,6 +7,7 @@
 #include <iterator>
 #include <vector>
 #include <algorithm>
+#include "../../infrastructure/MemoryDBConnection.hpp"
 #include <map>
 
 using namespace std;
@@ -14,9 +15,14 @@ using namespace std;
 class VirtualDatabase : public SeriesDAO
 {
 private:
+  MemoryDBConnection<Serie> *memoryDBConnection;
+  
   map<int, Serie> database;
 
 public:
+  VirtualDatabase(MemoryDBConnection<Serie>*);
+  virtual ~VirtualDatabase();
+
   void addSerie(Serie *serie) override;
   void updateSerie(Serie *serie) override;
   void deleteSerie(int id) override;

@@ -3,6 +3,17 @@
 
 using namespace std;
 
+VirtualDatabase::VirtualDatabase(MemoryDBConnection<Serie> *conn)
+{
+  this->memoryDBConnection = conn;
+  this->database = this->memoryDBConnection->getConnection();
+}
+
+VirtualDatabase::~VirtualDatabase()
+{
+  delete this->memoryDBConnection;
+}
+
 void VirtualDatabase::addSerie(Serie *serie)
 {
   int id = database.size() + 1;

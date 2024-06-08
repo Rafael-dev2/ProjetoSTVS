@@ -5,7 +5,7 @@
 #include <string>
 #include "Textos.hpp"
 #include "../controller/SerieController.hpp"
-#include "../model/DBconnection.hpp"
+#include "../infrastructure/MariaDBConnection.hpp"
 
 using namespace std;
 
@@ -13,15 +13,11 @@ class Menu
 {
   private:
     SerieController *serieController;
-    bool hasDatabase;
     void launchActions(string title, vector<string> menuItems, vector<void (Menu::*)() const> actions) const;
-    DBconnection *db;
-    std::unique_ptr<sql::Connection> conector;
 
   public:
     Menu(SerieController *serieController);
     ~Menu();
-    void getDatabase() const;
     void Help() const;
     void Credits() const;
     void AddData() const;

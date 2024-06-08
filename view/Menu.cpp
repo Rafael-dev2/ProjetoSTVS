@@ -1,24 +1,12 @@
 #include "./Menu.hpp"
 #include <iostream>
 #include "../controller/dto/AddSerieDTO.hpp"
-#include "../model/DBconnection.hpp"
+#include "../infrastructure/MariaDBConnection.hpp"
 #include "../repositories/implementation/VirtualDatabase.hpp"
 
 Menu::Menu(SerieController *serieController)
 {
-  this->hasDatabase = true;
   this->serieController = serieController;
-  auto* db = new DBconnection;
-  try {
-    cout << "Começando leitura do banco de dados" << endl;
-    this->conector = db->createconnection(db->url,db->properties);
-    db->conector = &this->conector;
-  }
-  catch (sql::SQLException& e) {
-    cout << "Erro com banco de dados, apenas banco em memória disponível" << endl;
-    this->hasDatabase = false;
-  }
-  if(hasDatabase == true){this->getDatabase();}
 }
 
 Menu::~Menu()
@@ -40,21 +28,7 @@ void Menu::series() const
   vector<void (Menu::*)() const> functions{&Menu::addSerie, &Menu::listSeries, &Menu::AddData};
   launchActions("Series", menuItens, functions);
 }
-void Menu::getDatabase() const {
-  int i = 0;
-  Serie* serie;
-  std::unique_ptr<sql::Statement> stmnt(conector->createStatement());
-  stmnt->executeQuery("USE Si300A2024_03;");
-  sql::ResultSet *size = stmnt->executeQuery("SELECT * FROM SERIES");
-  while(size->next()) {
-    serie = db->getData(conector,i);
-    serieController->addSerie(serie);
-    i++;
-  }
-  if( i != 0){
-  cout <<"Todas as séries foram extraidas do banco" << endl;
-  }
-}
+
 
 void Menu::addSerie() const
 {
@@ -105,34 +79,16 @@ void Menu::addSerie() const
       canal,
       nota);
   this->serieController->addSerie(addSerieDTO);
-  if(hasDatabase == true){
-      Serie* temp = new Serie(nome,
-      anoDeLancamento,
-      temporada,
-      numEpisodios,
-      principaisAtores,
-      personagensPrincipais,
-      canal,
-      nota);
-      db->insertData(conector,temp);
-      cin.ignore();
-  }
-
 }
-void Menu::AddData() const{
+
+void Menu::AddData() const
+{
   AddSerieDTO* a = new AddSerieDTO("Breaking Bad",2008,1,7,"Bryn Cranston","Walter White","AMC",9);
   AddSerieDTO* b = new AddSerieDTO("Arrow",2012,1,23,"Stephen Amell","Oliver Queen","DW",7);
   AddSerieDTO* c = new AddSerieDTO("CSI: Investigação Criminal",2000,1,23,"William Petersen","Gil Brossom","CBS",5);
   this->serieController->addSerie(a);
   this->serieController->addSerie(b);
   this->serieController->addSerie(c);
-  if(hasDatabase == true){
-  for(int i = 0; i < this->serieController->listSeries().size(); i++){
-    Serie* temp;
-    temp = (this->serieController->listSeries())[i];
-    db->insertData(conector,temp);
-  }
-}
   cout << "Dados Adicionados" << endl;
 }
 
