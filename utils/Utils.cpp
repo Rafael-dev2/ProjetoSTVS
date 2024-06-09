@@ -7,7 +7,7 @@ using namespace std;
 void Utils::freezeScreen()
 {
   cout << endl;
-  cout << "Press ENTER key to continue...";
+  cout << "Pressione ENTER para continuar...";
   cin.ignore();
   cin.get();
 }

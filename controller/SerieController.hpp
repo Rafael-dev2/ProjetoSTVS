@@ -27,6 +27,7 @@ class SerieController final
     void start() const;
     void series() const;
     void addSerieAction() const;
+    void updateSerie() const;
     void listSeries() const;
     void help() const;
     void credits() const;

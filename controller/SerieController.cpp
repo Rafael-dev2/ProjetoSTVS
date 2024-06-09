@@ -21,8 +21,13 @@ void SerieController::start() const
 
 void SerieController::series() const
 {
-  vector<string> menuItens{"Adicionar Serie", "Relatorios", "Deletar Serie"};
-  vector<void (SerieController::*)() const> functions{&SerieController::addSerieAction, &SerieController::listSeries, &SerieController::deleteSerie};
+  vector<string> menuItens{"Adicionar Serie", "Relatorios", "Atualizar Serie", "Deletar Serie"};
+  vector<void (SerieController::*)() const> functions{
+    &SerieController::addSerieAction,
+    &SerieController::listSeries,
+    &SerieController::updateSerie,
+    &SerieController::deleteSerie
+  };
   this->launchActions("Series", menuItens, functions);
 }
 
@@ -57,6 +62,7 @@ void SerieController::credits() const
 
 void SerieController::addSerie() const
 {
+  this->menu->print("Adicionar Serie");
   auto addSerieDTO = this->menu->addSerie(); 
 
   Serie *serie = new Serie(
@@ -83,7 +89,7 @@ void SerieController::addMockSerie() const
   seriesDAO->addSerie(b);
   seriesDAO->addSerie(c);
 
-  this->menu->print("Series inseridas com sucesso!");
+  this->menu->showMessage("Series inseridas com sucesso!");
 }
 
 void SerieController::listSeriesByTitle() const
@@ -110,19 +116,89 @@ void SerieController::listSeriesByRating() const
   this->menu->listSeries(series);
 }
 
+void SerieController::updateSerie() const
+{
+  int id = 0;
+  Serie *serie = NULL;
+
+  do {
+    this->menu->print("Atualizar Serie");
+    this->menu->print("Insira [0] para sair.");
+
+    id = this->menu->getId();
+
+    if (id == 0) {
+      return;
+    }
+
+    if (id < 0) {
+      this->menu->showMessage("ID inválido!");
+      continue;
+    }
+
+    serie = this->seriesDAO->findSerieById(id);
+
+    if (serie == NULL) 
+    {
+      this->menu->showMessage("Serie não encontrada!");
+      id = -1;
+    }
+  } while(id < 0);
+
+  this->menu->print("");
+  this->menu->print("Pressione ENTER para manter o valor atual.");
+  auto addSerieDTO = this->menu->updateSerie(serie);
+
+  if (addSerieDTO->getNome() != "") {
+    serie->setNome(addSerieDTO->getNome());
+  }
+
+  if (addSerieDTO->getAnoDeLancamento() != 0) {
+    serie->setAnoDeLancamento(addSerieDTO->getAnoDeLancamento());
+  }
+
+  if (addSerieDTO->getTemporada() != 0) {
+    serie->setTemporada(addSerieDTO->getTemporada());
+  }
+
+  if (addSerieDTO->getNumEpisodios() != 0) {
+    serie->setNumEpisodios(addSerieDTO->getNumEpisodios());
+  }
+
+  if (addSerieDTO->getPrincipaisAtores() != "") {
+    serie->setPrincipaisAtores(addSerieDTO->getPrincipaisAtores());
+  }
+
+  if (addSerieDTO->getPersonagensPrincipais() != "") {
+    serie->setPersonagensPrincipais(addSerieDTO->getPersonagensPrincipais());
+  }
+
+  if (addSerieDTO->getCanal() != "") {
+    serie->setCanal(addSerieDTO->getCanal());
+  }
+
+  if (addSerieDTO->getNota() != 0) {
+    serie->setNota(addSerieDTO->getNota());
+  }
+
+  this->seriesDAO->updateSerie(serie);
+}
+
 void SerieController::deleteSerie() const
 {  
   int id = 0;
   
   do {
-    id = this->menu->deleteSerie();
+    this->menu->print("Deletar Serie");
+    this->menu->print("Insira [0] para sair.");
+    id = this->menu->getId();
 
     if (id == 0) {
       break;
     }
 
     if (id < 0) {
-      this->menu->print("ID inválido!");
+      this->menu->showMessage("ID inválido!");
       continue;
     }
 
@@ -130,13 +206,13 @@ void SerieController::deleteSerie() const
 
     if (serie == NULL) 
     {
-      this->menu->print("Serie não encontrada!");
+      this->menu->showMessage("Serie não encontrada!");
       continue;
     }
 
     this->seriesDAO->deleteSerie(id);
 
-    this->menu->print("Serie deletada com sucesso!");
+    this->menu->showMessage("Serie deletada com sucesso!");
   } while(id < 0);
 }
 

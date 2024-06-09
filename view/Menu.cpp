@@ -29,12 +29,16 @@ void Menu::print(string actionTitle, int w) const
 
 void Menu::print(string message) const 
 {
+  cout << Menu::filler << ' ' << message << endl;
+}
+
+void Menu::showMessage(string message) const 
+{
   Utils::clearScreen();
   cout << Menu::filler << ' ' << message << endl;
   Utils::freezeScreen();
   Utils::clearScreen();
 }
-
 
 void Menu::listSeries(vector<Serie *> series) const
 {
@@ -86,7 +90,7 @@ void Menu::listSeries(vector<Serie *> series) const
 
 shared_ptr<AddSerieDTO> Menu::addSerie() const
 {
-  cout << "Adicionar Serie" << endl;
+  Utils::clearScreen();
 
   cout << "Nome..........: ";
   string nome;
@@ -137,13 +141,61 @@ shared_ptr<AddSerieDTO> Menu::addSerie() const
   return dto;
 }
 
-int Menu::deleteSerie() const
+int Menu::getId() const
 {
-  cout << "Deletar Serie. Insira [0] para sair." << endl;
   cout << "Id da Serie..........: ";
 
   int id;
   cin >> id;
 
   return id;
+}
+
+shared_ptr<AddSerieDTO> Menu::updateSerie(Serie *& serie) const
+{
+  cout << "Nome.......... (" + serie->getNome() + "): ";
+  string nome;
+  cin.ignore(); // Clear the newline character left in the buffer
+  getline(cin, nome);
+
+  cout << "Ano de Lancamento.......... (" + to_string(serie->getAnoDeLancamento()) + "): ";
+  string anoDeLancamento;
+  getline(cin, anoDeLancamento);
+
+  cout << "Temporada.......... (" + to_string(serie->getTemporada()) + "): ";
+  string temporada;
+  getline(cin, temporada);
+
+  cout << "Numero de Episodios.......... (" + to_string(serie->getNumEpisodios()) + "): ";
+  string numEpisodios;
+  getline(cin, numEpisodios);
+
+  cout << "Principais Atores.......... (" + serie->getPrincipaisAtores() + "): ";
+  string principaisAtores;
+  getline(cin, principaisAtores);
+
+  cout << "Personagens Principais.......... (" + serie->getPersonagensPrincipais() + "): ";
+  string personagensPrincipais;
+  getline(cin, personagensPrincipais);
+
+  cout << "Canal.......... (" + serie->getCanal() + "): ";
+  string canal;
+  getline(cin, canal);
+
+  cout << "Nota.......... (" + to_string(serie->getNota()) + "): ";
+  string nota;
+  getline(cin, nota);
+
+  shared_ptr<AddSerieDTO> dto = make_shared<AddSerieDTO>(
+    nome,
+    anoDeLancamento != "" ? stoi(anoDeLancamento) : 0,
+    temporada != "" ? stoi(temporada) : 0,
+    numEpisodios != "" ? stoi(numEpisodios) : 0,
+    principaisAtores,
+    personagensPrincipais,
+    canal,
+    nota != "" ? stoi(nota) : 0
+  );
+
+  return dto;
 }

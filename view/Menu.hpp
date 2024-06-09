@@ -22,12 +22,14 @@ public:
 
   void print(string, int) const;
   void print(string) const;
+  void showMessage(string) const;
 
   void Help() const;
   void Credits() const;
   void listSeries(vector<Serie *> series) const;
   shared_ptr<AddSerieDTO> addSerie() const;
-  int deleteSerie() const;
+  shared_ptr<AddSerieDTO> updateSerie(Serie *& serie) const;
+  int getId() const;
 };
 
 #endif
