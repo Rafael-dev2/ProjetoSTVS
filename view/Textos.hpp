@@ -20,7 +20,6 @@ class Textos {
             }
         }else{cout << "Falha na leitura do arquivo" << endl;}
         file.close();
-
     }
 };
 

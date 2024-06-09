@@ -7,7 +7,6 @@
 #include <mariadb/conncpp.hpp>
 #include <string>
 
-#include "../controller/SerieController.hpp"
 #include "../repositories/SeriesDAO.hpp"
 
 using namespace std;
@@ -30,9 +29,6 @@ public:
     std::shared_ptr<sql::Connection> getConnection();
 
     string getDatabaseName() const;
-    
-    // Serie *getData(const std::unique_ptr<sql::Connection> &conn, int row);
-    // void insertData(const std::unique_ptr<sql::Connection> &conn, Serie *serie);
 };
 
 #endif // DBCONNECTION_HPP

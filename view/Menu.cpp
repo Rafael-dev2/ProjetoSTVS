@@ -1,50 +1,88 @@
-#include "./Menu.hpp"
-#include "../utils/Utils.hpp"
-#include <iostream>
-#include <math.h>
-#include "../controller/dto/AddSerieDTO.hpp"
-#include "../controller/SerieController.hpp"
-#include "../infrastructure/MariaDBConnection.hpp"
-#include "../repositories/implementation/VirtualDatabase.hpp"
+#include "Menu.hpp"
 
-Menu::Menu(SerieController *serieController)
-{
-  this->serieController = serieController;
-}
+const char Menu::filler = '*';
 
 Menu::~Menu()
 {
   cout << "Desligando" << endl;
-  delete serieController;
 }
 
-void Menu::start() const
-{
-  vector<string> menuItens{"Series","Ajuda","Creditos"};
-  vector<void (Menu::*)() const> functions{&Menu::series, &Menu::Help, &Menu::Credits};
-  launchActions("Main Menu", menuItens, functions, this);
+void Menu::Help() const{
+  Textos::exibirTexto("./help.txt");
+  Utils::freezeScreen();
 }
 
-void Menu::series() const
-{
-  vector<string> menuItens{"Adicionar Serie", "Relatorios", "Adicionar Dados - Apenas para fins de teste"};
-  vector<void (Menu::*)() const> functions{&Menu::addSerie, &Menu::listSeries, &Menu::AddData};
-  launchActions("Series", menuItens, functions, this);
+void Menu::Credits() const{
+  Textos::exibirTexto("./credits.txt");
+  Utils::freezeScreen();
 }
 
-void Menu::listSeries() const
+void Menu::print(string actionTitle, int w) const 
 {
-  vector<string> menuItens{"Ordenar por titulo", "Ordenar por canal", "Ordenar por ano", "Ordenar por avaliação"};
-  vector<void (SerieController::*)() const> functions{
-    &SerieController::listSeriesByTitle, 
-    &SerieController::listSeriesByChannel, 
-    &SerieController::listSeriesByYear, 
-    &SerieController::listSeriesByRating
+  int titleSize = actionTitle.length();
+  int rest = w - titleSize;
+
+  int spaces = round(rest / 2);
+
+  cout << Menu::filler << Utils::replicate(' ', spaces) << actionTitle << endl;
+}
+
+void Menu::print(string message) const 
+{
+  cout << Menu::filler << message << endl;
+  Utils::freezeScreen();
+}
+
+
+void Menu::listSeries(vector<Serie *> series) const
+{
+  string idTitle = " Id";
+  string nameTitle = " Nome";
+  string tempTitle = " Temporada";
+  string episodesTitle = " Episodios";
+  string actorsTitle = " Principais Atores";
+  string charactersTitle = " Personagens Principais";
+  string channelTitle = " Canal";
+  string yearTitle = " Ano";
+  string ratingTitle = " Nota";
+
+  vector<string> fields = {
+    idTitle,
+    nameTitle,
+    tempTitle,
+    episodesTitle,
+    actorsTitle,
+    charactersTitle,
+    channelTitle,
+    yearTitle,
+    ratingTitle
   };
-  launchActions("Relatorios", menuItens, functions, this->serieController);
+
+  vector<map<string, string>> data;
+
+  for (auto serie : series)
+  {
+    map<string, string> row;
+    row[idTitle] = to_string(serie->getId());
+    row[nameTitle] = serie->getNome();
+    row[tempTitle] = to_string(serie->getTemporada());
+    row[episodesTitle] = to_string(serie->getNumEpisodios());
+    row[actorsTitle] = serie->getPrincipaisAtores();
+    row[charactersTitle] = serie->getPersonagensPrincipais();
+    row[channelTitle] = serie->getCanal();
+    row[yearTitle] = to_string(serie->getAnoDeLancamento());
+    row[ratingTitle] = to_string(serie->getNota());
+
+    data.push_back(row);
+  }
+
+  shared_ptr<MakeTableDecoratorDTO> dto = make_shared<MakeTableDecoratorDTO>(fields, data);
+  
+  Utils::printTable(dto);
+  Utils::freezeScreen();
 }
 
-void Menu::addSerie() const
+shared_ptr<AddSerieDTO> Menu::addSerie() const
 {
   cout << "Adicionar Serie" << endl;
 
@@ -83,84 +121,27 @@ void Menu::addSerie() const
   int nota;
   cin >> nota;
 
-  AddSerieDTO *addSerieDTO = new AddSerieDTO(
-      nome,
-      anoDeLancamento,
-      temporada,
-      numEpisodios,
-      principaisAtores,
-      personagensPrincipais,
-      canal,
-      nota);
-  this->serieController->addSerie(addSerieDTO);
+  shared_ptr<AddSerieDTO> dto = make_shared<AddSerieDTO>(
+    nome,
+    anoDeLancamento,
+    temporada,
+    numEpisodios,
+    principaisAtores,
+    personagensPrincipais,
+    canal,
+    nota
+  );
+
+  return dto;
 }
 
-void Menu::AddData() const
+int Menu::deleteSerie() const
 {
-  AddSerieDTO* a = new AddSerieDTO("Breaking Bad",2008,1,7,"Bryn Cranston","Walter White","AMC",9);
-  AddSerieDTO* b = new AddSerieDTO("Arrow",2012,1,23,"Stephen Amell","Oliver Queen","DW",7);
-  AddSerieDTO* c = new AddSerieDTO("CSI: Investigação Criminal",2000,1,23,"William Petersen","Gil Brossom","CBS",5);
-  this->serieController->addSerie(a);
-  this->serieController->addSerie(b);
-  this->serieController->addSerie(c);
-  cout << "Dados Adicionados" << endl;
-}
+  cout << "Deletar Serie" << endl;
+  cout << "Id da Serie..........: ";
 
-void Menu::Help() const{
-  Textos::exibirTexto("./help.txt");
-  Utils::freezeScreen();
-}
+  int id;
+  cin >> id;
 
-void Menu::Credits() const{
-  Textos::exibirTexto("./credits.txt");
-  Utils::freezeScreen();
-}
-
-template<class T, class U>
-void Menu::launchActions(string title, vector<string> menuItems, vector<void (T::*)() const> actions, U* instance) const
-{
-  int option = 0;
-
-  string leaveText = to_string(option) + " - Sair";
-  string message = "Insira a opção: ";
-
-  int width = Utils::calculateWidth(title, message, menuItems);
-  const string decorator = Utils::replicate('*', width);
-
-  do
-  {
-    Utils::clearScreen();
-
-    cout << decorator << endl;
-    this->print(title, width);
-    cout << decorator << endl;
-
-    for (int i = 0; i < menuItems.size(); i++)
-    {
-      string line = to_string(i + 1) + " - " + menuItems[i];
-      this->print(line, width);
-    }
-
-    this->print(leaveText, width);
-    cout << decorator << endl;
-    cout << message;
-    cin >> option;
-
-    if (option == 0) {
-      break;
-    }
-
-    Utils::clearScreen();
-    (instance->*actions.at(option - 1))();
-  } while (option != 0);
-}
-
-void Menu::print(string actionTitle, int w) const 
-{
-  int titleSize = actionTitle.length();
-  int rest = w - titleSize;
-
-  int spaces = round(rest / 2);
-
-  cout << '*' << Utils::replicate(' ', spaces) << actionTitle << endl;
+  return id;
 }
