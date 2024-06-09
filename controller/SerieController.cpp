@@ -112,12 +112,32 @@ void SerieController::listSeriesByRating() const
 
 void SerieController::deleteSerie() const
 {  
-  int id = this->menu->deleteSerie();
-  cin >> id;
+  int id = 0;
+  
+  do {
+    id = this->menu->deleteSerie();
 
-  this->seriesDAO->deleteSerie(id);
+    if (id == 0) {
+      break;
+    }
 
-  this->menu->print("Serie deletada com sucesso!");
+    if (id < 0) {
+      this->menu->print("ID inválido!");
+      continue;
+    }
+
+    Serie *serie = this->seriesDAO->findSerieById(id);
+
+    if (serie == NULL) 
+    {
+      this->menu->print("Serie não encontrada!");
+      continue;
+    }
+
+    this->seriesDAO->deleteSerie(id);
+
+    this->menu->print("Serie deletada com sucesso!");
+  } while(id < 0);
 }
 
 void SerieController::launchActions(string title, vector<string> menuItems, vector<void (SerieController::*)() const> actions) const

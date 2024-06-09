@@ -29,8 +29,10 @@ void Menu::print(string actionTitle, int w) const
 
 void Menu::print(string message) const 
 {
-  cout << Menu::filler << message << endl;
+  Utils::clearScreen();
+  cout << Menu::filler << ' ' << message << endl;
   Utils::freezeScreen();
+  Utils::clearScreen();
 }
 
 
@@ -137,7 +139,7 @@ shared_ptr<AddSerieDTO> Menu::addSerie() const
 
 int Menu::deleteSerie() const
 {
-  cout << "Deletar Serie" << endl;
+  cout << "Deletar Serie. Insira [0] para sair." << endl;
   cout << "Id da Serie..........: ";
 
   int id;

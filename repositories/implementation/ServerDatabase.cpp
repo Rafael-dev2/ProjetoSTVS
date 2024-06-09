@@ -73,7 +73,10 @@ Serie *ServerDatabase::findSerieById(int id) const
   stmnt->setInt(1, id);
 
   sql::ResultSet *lis = stmnt->executeQuery();
-  lis->next();
+  if(!lis->next())
+  {
+    return nullptr;
+  }
 
   int serieId, year, season, eps, rate;
   string name,act,chr,cnl;
