@@ -8,7 +8,7 @@ using namespace std;
 
 const string ServerDatabase::ServerDatabase::tableName = "SERIES";
 
-const string ServerDatabase::SQL_InsertSerie = "INSERT INTO " + ServerDatabase::tableName + " (internal_id, series_name, release_year, season, episode_count, main_actors, main_characters, network, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const string ServerDatabase::SQL_InsertSerie = "INSERT INTO " + ServerDatabase::tableName + " (series_name, release_year, season, episode_count, main_actors, main_characters, network, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 const string ServerDatabase::SQL_UpdateSerie = "UPDATE " + ServerDatabase::tableName + " SET series_name = ?, release_year = ?, season = ?, episode_count = ?, main_actors = ?, main_characters = ?, network = ?, rating = ? WHERE internal_id = ?";
 const string ServerDatabase::SQL_GetSerie = "SELECT * FROM " + ServerDatabase::tableName + " WHERE internal_id = ?";
 
@@ -25,21 +25,15 @@ ServerDatabase::~ServerDatabase()
 
 void ServerDatabase::addSerie(Serie *serie)
 {
-  auto idStmnt = this->getStmnt();
-  string query = "SELECT COUNT(*) FROM " + ServerDatabase::tableName;
-  sql::ResultSet *lis = idStmnt->executeQuery(query);
-  lis->next();
-  int id = lis->getInt("COUNT(*)")+1;
   auto stmnt = this->getStmnt(ServerDatabase::SQL_InsertSerie);
-  stmnt->setInt(1, id);
-  stmnt->setString(2, serie->getNome());
-  stmnt->setInt(3, serie->getAnoDeLancamento());
-  stmnt->setInt(4, serie->getTemporada());
-  stmnt->setInt(5, serie->getNumEpisodios());
-  stmnt->setString(6, serie->getPrincipaisAtores());
-  stmnt->setString(7, serie->getPersonagensPrincipais());
-  stmnt->setString(8, serie->getCanal());
-  stmnt->setInt(9, serie->getNota());
+  stmnt->setString(1, serie->getNome());
+  stmnt->setInt(2, serie->getAnoDeLancamento());
+  stmnt->setInt(3, serie->getTemporada());
+  stmnt->setInt(4, serie->getNumEpisodios());
+  stmnt->setString(5, serie->getPrincipaisAtores());
+  stmnt->setString(6, serie->getPersonagensPrincipais());
+  stmnt->setString(7, serie->getCanal());
+  stmnt->setInt(8, serie->getNota());
   stmnt->executeQuery();
 }
 
