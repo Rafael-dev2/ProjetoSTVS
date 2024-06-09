@@ -11,27 +11,27 @@ using namespace std;
 
 class Menu
 {
-  private:
-    SerieController *serieController;
-    void launchActions(string title, vector<string> menuItems, vector<void (Menu::*)() const> actions) const;
-    const string replicate(char symbol, int length) const;
-    void print(string, int) const;
+private:
+  SerieController *serieController;
 
-  public:
-    Menu(SerieController *serieController);
-    ~Menu();
-    void Help() const;
-    void Credits() const;
-    void AddData() const;
-    void start() const;
-    void series() const;
-    void addSerie() const;
-	void listSeriesMenu() const;
-    void listSeries(vector<Serie *> series) const;
-	void listSeriesbyTitle() const;
-	void listSeriesbyYear() const;
-	void listSeriesbyChannel() const;
-	void listSeriesbyRating() const;
+  template <class T, class U>
+  void launchActions(string title, vector<string> menuItems, vector<void (T::*)() const> actions, U* instance) const;
+
+  void print(string, int) const;
+
+public:
+  Menu(SerieController *serieController);
+  ~Menu();
+
+  void Help() const;
+  void Credits() const;
+  void AddData() const;
+
+  void series() const;
+
+  void start() const;
+  void listSeries() const;
+  void addSerie() const;
 };
 
 #endif

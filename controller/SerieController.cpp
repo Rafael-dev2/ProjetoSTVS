@@ -1,13 +1,15 @@
 #include "SerieController.hpp"
 
-SerieController::SerieController(SeriesDAO *seriesDAO)
+SerieController::SerieController(SeriesDAO *seriesDAO, SerieMenu* menu)
 {
   this->seriesDAO = seriesDAO;
+  this->menu = menu;
 }
 
 SerieController::~SerieController()
 {
   delete seriesDAO;
+  delete menu;
 }
 
 void SerieController::addSerie(AddSerieDTO *addSerieDTO)
@@ -31,19 +33,26 @@ void SerieController::addSerie(Serie* serie)
   seriesDAO->addSerie(serie);
 }
 
-vector<Serie *> SerieController::listSeriesByTitle() const
+void SerieController::listSeriesByTitle() const
 {
-  return seriesDAO->listSeriesAndOrderByTitle();
+  vector<Serie *> series = this->seriesDAO->listSeriesAndOrderByTitle();
+  this->menu->listSeries(series);
 }
-vector<Serie *> SerieController::listSeriesByYear() const
+
+void SerieController::listSeriesByYear() const
 {
-  return seriesDAO->listSeriesAndOrderByYear();
+  vector<Serie *> series = this->seriesDAO->listSeriesAndOrderByYear();
+  this->menu->listSeries(series);
 }
-vector<Serie *> SerieController::listSeriesByChannel() const
+
+void SerieController::listSeriesByChannel() const
 {
-  return seriesDAO->listSeriesAndOrderByChannel();
+  vector<Serie *> series = this->seriesDAO->listSeriesAndOrderByChannel();
+  this->menu->listSeries(series);
 }
-vector<Serie *> SerieController::listSeriesByRating() const
+
+void SerieController::listSeriesByRating() const
 {
-  return seriesDAO->listSeriesAndOrderByRating();
+  vector<Serie *> series = this->seriesDAO->listSeriesAndOrderByRating();
+  this->menu->listSeries(series);
 }

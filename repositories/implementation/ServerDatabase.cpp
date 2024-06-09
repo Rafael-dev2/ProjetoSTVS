@@ -166,7 +166,7 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByYear() const
   auto stmnt = this->getStmnt();
 
   string query = "SELECT * FROM " + ServerDatabase::tableName;
-  query += " ORDER BY release_year;";
+  query += " ORDER BY release_year DESC;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
 
@@ -200,7 +200,7 @@ vector<Serie *> ServerDatabase::listSeriesAndOrderByRating() const
   auto stmnt = this->getStmnt();
 
   string query = "SELECT * FROM " + ServerDatabase::tableName;
-  query += " ORDER BY rating;";
+  query += " ORDER BY rating DESC;";
 
   sql::ResultSet *lis = stmnt->executeQuery(query);
 
