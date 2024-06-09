@@ -6,8 +6,8 @@
 
 using namespace std;
 
-const string MariaDBConnection::databaseName = "stvs";
-//  const string MariaDBConnection::databaseName = "Si300A2024_03";
+// const string MariaDBConnection::databaseName = "stvs";
+ const string MariaDBConnection::databaseName = "Si300A2024_03";
 
 MariaDBConnection::MariaDBConnection()
 {
@@ -16,16 +16,16 @@ MariaDBConnection::MariaDBConnection()
 
     // Configure Connection
     // Configuração propria
-    this->url = "jdbc:mariadb://localhost:3306/" + MariaDBConnection::databaseName;
-    sql::Properties properties({{"user", "root"},
-                                {"password", "docker"}});
+    // this->url = "jdbc:mariadb://localhost:3306/" + MariaDBConnection::databaseName;
+    // sql::Properties properties({{"user", "root"},
+    //                             {"password", "docker"}});
 
     // Configurações da FT
-    //  this->url = "jdbc:mariadb://143.106.243.64/ + MariaDBConnection::databaseName";
-    //  sql::Properties properties({
-    //      {"user", "Si300A2024_03"},
-    //      {"password", "4CPg3dKPcr"}
-    //  });
+     this->url = "jdbc:mariadb://143.106.243.64/ + MariaDBConnection::databaseName";
+     sql::Properties properties({
+         {"user", "Si300A2024_03"},
+         {"password", "4CPg3dKPcr"}
+     });
 
     this->properties = properties;
 };

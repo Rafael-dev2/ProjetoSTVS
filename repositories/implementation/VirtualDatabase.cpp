@@ -84,7 +84,7 @@ vector<Serie *> VirtualDatabase::listSeriesAndOrderByChannel() const
   }
 
   sort(result.begin(), result.end(), [](Serie *a, Serie *b)
-       { return a->getNome() < b->getNome(); });
+       { return a->getCanal() < b->getCanal(); });
 
   return result;
 };
@@ -99,7 +99,7 @@ vector<Serie *> VirtualDatabase::listSeriesAndOrderByYear() const
   }
 
   sort(result.begin(), result.end(), [](Serie *a, Serie *b)
-       { return a->getNome() < b->getNome(); });
+       { return a->getAnoDeLancamento() > b->getAnoDeLancamento(); });
 
   return result;
 };
@@ -114,7 +114,7 @@ vector<Serie *> VirtualDatabase::listSeriesAndOrderByRating() const
   }
 
   sort(result.begin(), result.end(), [](Serie *a, Serie *b)
-       { return a->getNome() < b->getNome(); });
+       { return a->getNota() > b->getNota(); });
 
   return result;
 };

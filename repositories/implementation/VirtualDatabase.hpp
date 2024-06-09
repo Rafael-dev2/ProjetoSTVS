@@ -1,5 +1,5 @@
-#ifndef VIRTUALDATABASE_CPP
-#define VIRTUALDATABASE_CPP
+#ifndef VIRTUALDATABASE_HPP
+#define VIRTUALDATABASE_HPP
 
 #include "../SeriesDAO.hpp"
 #include "../../model/Serie.hpp"
