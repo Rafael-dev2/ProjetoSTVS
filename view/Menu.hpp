@@ -26,7 +26,12 @@ class Menu
     void start() const;
     void series() const;
     void addSerie() const;
-    void listSeries() const;
+	void listSeriesMenu() const;
+    void listSeries(vector<Serie *> series) const;
+	void listSeriesbyTitle() const;
+	void listSeriesbyYear() const;
+	void listSeriesbyChannel() const;
+	void listSeriesbyRating() const;
 };
 
 #endif

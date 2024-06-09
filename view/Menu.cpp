@@ -27,7 +27,7 @@ void Menu::start() const
 void Menu::series() const
 {
   vector<string> menuItens{"Adicionar Serie", "Listar Series", "Adicionar Dados - Apenas para fins de teste"};
-  vector<void (Menu::*)() const> functions{&Menu::addSerie, &Menu::listSeries, &Menu::AddData};
+  vector<void (Menu::*)() const> functions{&Menu::addSerie, &Menu::listSeriesMenu, &Menu::AddData};
   launchActions("Series", menuItens, functions);
 }
 
@@ -94,10 +94,14 @@ void Menu::AddData() const
   cout << "Dados Adicionados" << endl;
 }
 
-void Menu::listSeries() const
-{
-  vector<Serie *> series = this->serieController->listSeriesByTitle();
+void Menu::listSeriesMenu() const{
+  vector<string> menuItens{"Listar por Nome", "Listar por Canal", "Listar por Ano ","Listar por Nota"};
+  vector<void (Menu::*)() const> functions{&Menu::listSeriesbyTitle, &Menu::listSeriesbyChannel, &Menu::listSeriesbyYear, &Menu::listSeriesbyRating};
+  launchActions("Menu Listas", menuItens, functions);
+}
 
+void Menu::listSeries(vector<Serie *> series) const
+{
   string idTitle = " Id";
   string nameTitle = " Nome";
   string tempTitle = " Temporada";
@@ -199,6 +203,24 @@ void Menu::listSeries() const
 
   Utils::freezeScreen();
 }
+
+void Menu::listSeriesbyTitle() const{
+	vector<Serie *> series = this->serieController->listSeriesByTitle();
+	this->listSeries(series);
+}
+void Menu::listSeriesbyYear() const{
+	vector<Serie *> series = this->serieController->listSeriesByYear();
+	this->listSeries(series);
+}
+void Menu::listSeriesbyChannel() const{
+	vector<Serie *> series = this->serieController->listSeriesByChannel();
+	this->listSeries(series);
+}
+void Menu::listSeriesbyRating() const{
+	vector<Serie *> series = this->serieController->listSeriesByRating();
+	this->listSeries(series);
+}
+
 void Menu::Help() const{
   Textos::exibirTexto("./help.txt");
   Utils::freezeScreen();

@@ -16,6 +16,9 @@ class SerieController final
     void addSerie(AddSerieDTO*);
     void addSerie(Serie*);
     vector<Serie *> listSeriesByTitle() const;
+	vector<Serie *> listSeriesByChannel() const;
+	vector<Serie *> listSeriesByYear() const;
+	vector<Serie *> listSeriesByRating() const;
 };
 
 #endif

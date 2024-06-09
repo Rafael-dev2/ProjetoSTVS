@@ -35,3 +35,15 @@ vector<Serie *> SerieController::listSeriesByTitle() const
 {
   return seriesDAO->listSeriesAndOrderByTitle();
 }
+vector<Serie *> SerieController::listSeriesByYear() const
+{
+  return seriesDAO->listSeriesAndOrderByYear();
+}
+vector<Serie *> SerieController::listSeriesByChannel() const
+{
+  return seriesDAO->listSeriesAndOrderByChannel();
+}
+vector<Serie *> SerieController::listSeriesByRating() const
+{
+  return seriesDAO->listSeriesAndOrderByRating();
+}
