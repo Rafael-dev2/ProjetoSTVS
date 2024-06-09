@@ -1,6 +1,36 @@
---------------------------------------------
-Sou o arquivo de ajuda do STVS
-
-Nota: Inserir o restante do arquivo de ajuda
---------------------------------------------
++-------------------------------------------------------------------------+
+| Sistema de Gerenciamento de Catálogo de Séries - 2024 - SI300A
+|                                                               
+| Este é um projeto é um sistema da gerenciamento de um catalogo de séries 
+| de TV.
+| 
+|  Características do Projeto:
+|  
+|  Banco de Dados: Este Projeto pode utilizar tanto banco de dados MariaDB
+|  quanto banco em mémoria
+|
+|  Séries: As Séries tem os seguintes atributos armazenados
+|          Id, Nome, Ano de Lançamento, Temporada, Número de Episódios,
+|          Atores Principais, Personagens Principais, Canal e Nota
+|
+|
+| Utilização Do Sistema:
+|
+| 1)Menu Principal:
+|   No Menu Principal você encontrará as seguintes opções
+|       1-Series: Esta opção a abrirá o menu relacionado às Series, nele 
+|       temos as opções de adicionar uma Série, recuperar as informações
+|       de uma atráves do Id,abrir o menu de listagem de séries, apagar
+|       uma série atráves do Id e editar uma série atráves do Id.
+|
+|       2-Ajuda: Esta opção abre este arquivo e o exibe na tela
+|       
+|       3-Créditos: Abre os créditos do projeto com informações sobre ele e
+|       dos criadores dele
+|       
+|       0-Sair: Sobe um Nível acima em qualquer um dos menus, caso esteja 
+|       no Menu Principal, a função sair fecha o programa                               
+|                                                              
+|                  
++-------------------------------------------------------------------------+
 
